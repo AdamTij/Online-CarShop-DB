@@ -1,0 +1,48 @@
+<?php
+$servername = "cssql.seattleu.edu";
+$username = "bd_atidjani";
+$password = "8AN9QY2G";
+$dbname = "bd_atidjani";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+// Check connection
+if (!$conn) {
+die("Connection failed: " . mysqli_connect_error());
+}
+
+$query = $_POST["query"];
+$action = $_POST["action"];
+$sql = $action . " " . $query;
+
+$result = mysqli_query($conn, $sql);
+
+if (!$conn) {
+die ("Query was not successful");
+}
+
+if ($action == "select") {
+
+    if (mysqli_num_rows($result) > 0) {
+        echo "<table border = '1'>\n";
+        // output data of each row
+        while ($row = mysqli_fetch_row($result)) {
+            echo "<tr>\n";
+            $cols = mysqli_num_fields($result);
+            for ($i = 0; $i < $cols; $i++) {
+                echo "<td>" . $row[$i] . "</td>\n";
+            }
+            echo "</tr>\n";
+        }
+        echo "</table>\n";
+    } else {
+        echo "0 results";
+    }
+    mysqli_free_result($result);
+}
+else{
+    echo $action . " was successful";
+}
+
+
+mysqli_close($conn);
